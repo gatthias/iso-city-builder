@@ -1,0 +1,89 @@
+body {
+  margin: 0;
+}
+* {
+  box-sizing: border-box;
+}
+
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.tiles-builder {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: stretch;
+  height: 100vh;
+  position: relative;
+}
+
+.tiles-builder header {
+  width: 100%;
+  height: 32px;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 12px;
+  background: #333;
+  color: white;
+}
+
+.tiles-builder header .title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.tiles-builder header .options {
+  display: flex;
+  align-items: center;
+}
+
+.tiles-library {
+  width: 20%;
+  max-width: 300px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: calc(100% - 32px);
+  overflow: scroll;
+}
+.tiles-view {
+  height: calc(100% - 32px);
+  flex-grow: 1;
+  overflow: scroll;
+  position: relative;
+}
+.tiles-library .tile {
+  background-image: url(assets/tiles_130x66_130x230.png);
+  background-repeat: no-repeat;
+  background-size: auto;
+  width: 130px;
+  height: 230px;
+}
+.tiles-library .tile.selected {
+  border: 1px solid black;
+}
+.tiles-view .tile {
+  background-image: url(assets/tiles_130x66_130x230.png);
+  background-repeat: no-repeat;
+  background-size: auto;
+  width: 130px;
+  height: 230px;
+  position: absolute;
+  pointer-events: none;
+}
+.tiles-view .tile .tile-btn {
+  background: rgba(0, 0, 0, 0.4);
+  width: 130px;
+  height: 130px;
+  display: block;
+  transform: translate(0px, 97px) scale(0.7, 0.35) rotate(45deg);
+  pointer-events: all;
+  will-change: opacity;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+.tiles-view .tile .tile-btn:hover {
+  opacity: 1;
+}
