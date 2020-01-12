@@ -1,0 +1,63 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+.modal-container {
+  position: relative;
+  z-index: 0;
+}
+
+.modal-overlay {
+  animation: fadeIn 200ms ease-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.modal-dialog {
+  text-align: left;
+  background: #111;
+  border-radius: 5px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  overflow: hidden;
+}
+
+.modal-head {
+  padding: 10px 16px 8px;
+  display: flex;
+  justify-content: space-between;
+  background: #222;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+.modal-body {
+  padding: 16px;
+  padding-top: 0;
+  text-align: inherit;
+  color: #aaa;
+}
+
+.modal-btn {
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  color: #eee;
+  cursor: pointer;
+}
+.modal-btn:hover {
+  color: #aaa;
+}

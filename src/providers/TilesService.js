@@ -88,9 +88,10 @@ export const createTiles = (gridSize, randomize = true) =>
 
 export const loadStateFromHash = (
   baseGridSize = 6,
-  baseTiles = createTiles(baseGridSize)
+  baseTiles = createTiles(baseGridSize),
+  maybeHash
 ) => {
-  const data = loadFromHash();
+  const data = loadFromHash(maybeHash);
   if (
     data &&
     data.gridSize &&

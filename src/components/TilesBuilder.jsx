@@ -26,6 +26,18 @@ export default function TilesBuilder() {
   /**
    * Header handlers
    */
+  const handleLoadHash = hash => {
+    const { gridSize: newGridSize, tiles: newTiles } = loadStateFromHash(
+      gridSize,
+      tiles,
+      hash
+    );
+
+    // Update state
+    setGridSize(newGridSize);
+    setTiles(newTiles);
+    updateHash();
+  };
   const handleGridSizeChange = ev => {
     const newValue = Number(ev.target.value);
     const newTiles = updateGridSize(gridSize, newValue, tiles);
@@ -70,6 +82,7 @@ export default function TilesBuilder() {
     <div className="tiles-builder">
       <Header
         gridSize={gridSize}
+        onLoadHash={handleLoadHash}
         onGridSizeChange={handleGridSizeChange}
         onRandomize={randomize}
         onClear={clear}
