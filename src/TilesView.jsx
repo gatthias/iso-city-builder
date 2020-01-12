@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  indexToBgPosition,
-  indexToViewPosition,
-  constants as tilesConstants
-} from "./TilesService";
+import { indexToBgPosition, indexToViewPosition } from "./TilesService";
 
 const getTileIdxFromBtnEvent = ev =>
   ev.target.hasAttribute("data-tile-idx")
@@ -21,7 +17,13 @@ export default function TilesView({
   const handleClick = ev => {
     const i = getTileIdxFromBtnEvent(ev);
     if (i > -1) {
-      onLeftClick(i);
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (ev.buttons === 1) {
+        onLeftClick(i);
+      } else if (ev.buttons === 2) {
+        onRightClick(i);
+      }
     }
   };
   const handleMouseMove = ev => {

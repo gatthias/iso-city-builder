@@ -1,16 +1,54 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import TilesLibrary from "./TilesLibrary";
 import TilesView from "./TilesView";
-import { indexToPosition, positionToIndex } from "./TilesService";
+import {
+  indexToPosition,
+  positionToIndex,
+  stateToB64,
+  B64ToState
+} from "./TilesService";
 
 const createTiles = (gridSize, randomize = true) =>
   new Array(gridSize * gridSize)
     .fill(0)
     .map((_, i) => (randomize ? Math.floor(Math.random() * 72) : 0));
 
+// Try to load data from hash
+let baseGridSize = 6;
+let baseTiles = createTiles(baseGridSize);
+try {
+  //const hash = "eyJncmlkU2l6ZSI6NiwidGlsZXMiOlswLDQ0LDQ0LDQ0LDQ0LDAsNDUsNzAsNjUsNjQsNDksNDMsNDUsNiwxLDYsNDksNDMsNDUsMzgsOCw0MCw0OSw0Myw0NSw2OSw2LDcxLDQ4LDQzLDAsNDIsNiw0Miw0MiwwXX0=";
+  const hash = window.location.hash.substr(1);
+  const data = B64ToState(hash);
+  if (
+    data &&
+    data.gridSize &&
+    typeof data.gridSize === "number" &&
+    data.tiles &&
+    data.tiles instanceof Array
+  ) {
+    baseGridSize = data.gridSize;
+    baseTiles = data.tiles;
+  }
+} catch (e) {}
+
+const debouce = (cb, delay) => {
+  const now = performance.now();
+  if (debouce.lastCall && now - debouce.lastCall < delay) {
+    window.clearTimeout(debouce.lastTimerId);
+  }
+
+  debouce.lastCall = now;
+  debouce.lastTimerId = window.setTimeout(() => {
+    cb();
+    debouce.lastCall = 0;
+    debouce.lastTimerId = null;
+  }, delay);
+};
+
 export default function TilesBuilder() {
-  const [gridSize, setGridSize] = useState(6);
-  const [tiles, setTiles] = useState(createTiles(gridSize));
+  const [gridSize, setGridSize] = useState(baseGridSize);
+  const [tiles, setTiles] = useState(baseTiles);
   const [selectedTile, setSelectedTile] = useState(0);
 
   const handleGridSizeChange = ev => {
@@ -37,10 +75,11 @@ export default function TilesBuilder() {
     // Update state
     setGridSize(newValue);
     setTiles(newTiles);
+    updateHash();
   };
 
-  const randomize = () => setTiles(createTiles(gridSize));
-  const clear = () => setTiles(createTiles(gridSize, false));
+  const randomize = () => setTiles(createTiles(gridSize)) || updateHash();
+  const clear = () => setTiles(createTiles(gridSize, false)) || updateHash();
 
   const handleSelect = newSelection => {
     if (newSelection !== selectedTile) {
@@ -48,10 +87,19 @@ export default function TilesBuilder() {
     }
   };
 
+  const updateHash = () => {
+    debouce(() => {
+      window.location.hash = stateToB64(gridSize, tiles);
+      console.log("called");
+    }, 500);
+  };
+
   const setTile = (tileIdx, tileType) => {
     const newTiles = [...tiles];
     newTiles[tileIdx] = tileType;
     setTiles(newTiles);
+
+    updateHash();
   };
 
   const leftClick = tileIdx => setTile(tileIdx, selectedTile);

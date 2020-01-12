@@ -10,9 +10,13 @@ export default function TilesLibrary({ selectedTile, onSelect }) {
         <div
           key={i}
           className={`tile ${selectedTile === i ? "selected" : ""}`}
-          style={{ backgroundPosition: tileToBgPosition(tile) }}
           onClick={() => onSelect(i)}
-        />
+        >
+          <div
+            className="tile-img"
+            style={{ backgroundPosition: tileToBgPosition(tile) }}
+          />
+        </div>
       ))}
     </div>
   );
