@@ -9,7 +9,7 @@ export default function Header({
 }) {
   return (
     <header>
-      <span className="title">IsoCity</span>
+      <span className="title">IsoCity Builder</span>
       <div className="options">
         <label htmlFor="gridsize-input">Grid Size: {gridSize}</label>&nbsp;
         <input
