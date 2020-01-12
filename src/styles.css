@@ -10,6 +10,30 @@ body {
   text-align: center;
 }
 
+.btn-clear {
+  padding: 3px 7px;
+  min-height: 24px;
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  color: #eee;
+  cursor: pointer;
+}
+.btn-clear:hover {
+  color: #aaa;
+}
+
+a {
+  color: #ffbc00;
+}
+a:hover {
+  color: rgb(169, 150, 99);
+}
+a:visited,
+a:focus {
+  color: rgb(212, 194, 147);
+}
+
 /**
  *  Scrollbars
  */
@@ -31,12 +55,25 @@ body {
   display: none;
 }
 
+input {
+  background-color: #212121;
+  width: 100%;
+  border: 0;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  height: 24px;
+  color: white;
+  padding: 2px 7px;
+  margin-bottom: 7px;
+}
+
 /**
  * Slider
  */
 /* partie commune */
 input[type="range"] {
   -webkit-appearance: none; /*nécessaire pour Chrome */
+  width: inherit;
   padding: 0; /* nécessaire pour IE */
   font: inherit; /* même rendu suivant font document */
   outline: none;

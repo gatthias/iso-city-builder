@@ -18,17 +18,30 @@ export const debouce = (cb, delay) => {
 };
 
 export const saveToHash = obj => {
-  window.location.hash = stateToB64(obj);
+  return (window.location.hash = stateToB64(obj));
 };
 
-export const loadFromHash = () => {
+export const loadFromHash = maybeHash => {
   let data = null;
   try {
-    const hash = window.location.hash.substr(1);
+    const hash = cleanHash(maybeHash || window.location.hash);
     data = B64ToState(hash);
   } catch (e) {
     /* This can safely fail */
   }
 
   return data;
+};
+
+export const cleanHash = hash => {
+  if (hash) {
+    if (hash.indexOf("/")) {
+      hash = hash.split("/").pop();
+    }
+    if (hash[0] === "#") {
+      hash = hash.substr(1);
+    }
+  }
+
+  return hash;
 };
