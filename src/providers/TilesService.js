@@ -1,3 +1,5 @@
+import { loadFromHash } from "./utils";
+
 export const constants = {
   numTilesX: 12,
   numTilesY: 6,
@@ -51,14 +53,57 @@ export const indexToViewPosition = (
   };
 };
 
+export const updateGridSize = (oldGridSize, newGridSize, oldTiles) => {
+  // Save tiles along with their grid coordinates
+  const save = new Map();
+  oldTiles.forEach((tile, i) => {
+    const coords = indexToPosition(i, oldGridSize);
+    save.set(coords, tile);
+  });
+
+  // Create new empty board
+  const newTiles = createTiles(newGridSize, false);
+
+  // Restore saved tiles, getting their new index from their grid coordinates
+  save.forEach((tile, coords) => {
+    const newIdx = positionToIndex(coords.tileX, coords.tileY, newGridSize);
+    if (newIdx > -1 && newIdx < newTiles.length) {
+      newTiles[newIdx] = tile;
+    }
+  });
+
+  return newTiles;
+};
+
 export const availableTiles = new Array(
   constants.numTilesX * constants.numTilesY
 )
   .fill(1)
   .map((_, i) => indexToTileXY(i));
 
-export const stateToB64 = (gridSize, tiles) =>
-  Buffer.from(JSON.stringify({ gridSize, tiles })).toString("base64");
+export const createTiles = (gridSize, randomize = true) =>
+  new Array(gridSize * gridSize)
+    .fill(0)
+    .map((_, i) => (randomize ? Math.floor(Math.random() * 72) : 0));
 
-export const B64ToState = str => JSON.parse(Buffer.from(str, "base64"));
-//eyJncmlkU2l6ZSI6NiwidGlsZXMiOlswLDQ0LDQ0LDQ0LDQ0LDAsNDUsNzAsNjUsNjQsNDksNDMsNDUsNiwxLDYsNDksNDMsNDUsMzgsOCw0MCw0OSw0Myw0NSw2OSw2LDcxLDQ4LDQzLDAsNDIsNiw0Miw0MiwwXX0=
+export const loadStateFromHash = (
+  baseGridSize = 6,
+  baseTiles = createTiles(baseGridSize)
+) => {
+  const data = loadFromHash();
+  if (
+    data &&
+    data.gridSize &&
+    typeof data.gridSize === "number" &&
+    data.tiles &&
+    data.tiles instanceof Array
+  ) {
+    baseGridSize = data.gridSize;
+    baseTiles = data.tiles;
+  }
+
+  return {
+    gridSize: baseGridSize,
+    tiles: baseTiles
+  };
+};

@@ -1,51 +1,17 @@
 import "./TilesBuilder.css";
 import React, { useState } from "react";
+import Header from "components/Header";
 import TilesLibrary from "components/TilesLibrary";
 import TilesView from "components/TilesView";
 import {
-  indexToPosition,
-  positionToIndex,
-  stateToB64,
-  B64ToState
+  createTiles,
+  updateGridSize,
+  loadStateFromHash
 } from "providers/TilesService";
+import { debouce, saveToHash } from "providers/utils";
 
-const createTiles = (gridSize, randomize = true) =>
-  new Array(gridSize * gridSize)
-    .fill(0)
-    .map((_, i) => (randomize ? Math.floor(Math.random() * 72) : 0));
-
-// Try to load data from hash
-let baseGridSize = 6;
-let baseTiles = createTiles(baseGridSize);
-try {
-  //const hash = "eyJncmlkU2l6ZSI6NiwidGlsZXMiOlswLDQ0LDQ0LDQ0LDQ0LDAsNDUsNzAsNjUsNjQsNDksNDMsNDUsNiwxLDYsNDksNDMsNDUsMzgsOCw0MCw0OSw0Myw0NSw2OSw2LDcxLDQ4LDQzLDAsNDIsNiw0Miw0MiwwXX0=";
-  const hash = window.location.hash.substr(1);
-  const data = B64ToState(hash);
-  if (
-    data &&
-    data.gridSize &&
-    typeof data.gridSize === "number" &&
-    data.tiles &&
-    data.tiles instanceof Array
-  ) {
-    baseGridSize = data.gridSize;
-    baseTiles = data.tiles;
-  }
-} catch (e) {}
-
-const debouce = (cb, delay) => {
-  const now = performance.now();
-  if (debouce.lastCall && now - debouce.lastCall < delay) {
-    window.clearTimeout(debouce.lastTimerId);
-  }
-
-  debouce.lastCall = now;
-  debouce.lastTimerId = window.setTimeout(() => {
-    cb();
-    debouce.lastCall = 0;
-    debouce.lastTimerId = null;
-  }, delay);
-};
+//const hash = "eyJncmlkU2l6ZSI6NiwidGlsZXMiOlswLDQ0LDQ0LDQ0LDQ0LDAsNDUsNzAsNjUsNjQsNDksNDMsNDUsNiwxLDYsNDksNDMsNDUsMzgsOCw0MCw0OSw0Myw0NSw2OSw2LDcxLDQ4LDQzLDAsNDIsNiw0Miw0MiwwXX0=";
+const { gridSize: baseGridSize, tiles: baseTiles } = loadStateFromHash(6);
 
 export default function TilesBuilder() {
   const [gridSize, setGridSize] = useState(baseGridSize);
@@ -54,24 +20,7 @@ export default function TilesBuilder() {
 
   const handleGridSizeChange = ev => {
     const newValue = Number(ev.target.value);
-
-    // Save tiles along with their grid coordinates
-    const save = new Map();
-    tiles.forEach((tile, i) => {
-      const coords = indexToPosition(i, gridSize);
-      save.set(coords, tile);
-    });
-
-    // Create new empty board
-    const newTiles = createTiles(newValue, false);
-
-    // Restore saved tiles, getting their new index from their grid coordinates
-    save.forEach((tile, coords) => {
-      const newIdx = positionToIndex(coords.tileX, coords.tileY, newValue);
-      if (newIdx > -1 && newIdx < newTiles.length) {
-        newTiles[newIdx] = tile;
-      }
-    });
+    const newTiles = updateGridSize(gridSize, newValue, tiles);
 
     // Update state
     setGridSize(newValue);
@@ -88,12 +37,7 @@ export default function TilesBuilder() {
     }
   };
 
-  const updateHash = () => {
-    debouce(() => {
-      window.location.hash = stateToB64(gridSize, tiles);
-      console.log("called");
-    }, 500);
-  };
+  const updateHash = () => debouce(() => saveToHash({ gridSize, tiles }), 500);
 
   const setTile = (tileIdx, tileType) => {
     const newTiles = [...tiles];
@@ -108,22 +52,12 @@ export default function TilesBuilder() {
 
   return (
     <div className="tiles-builder">
-      <header>
-        <span className="title">City Builder</span>
-        <div className="options">
-          <label htmlFor="gridsize-input">Grid Size: {gridSize}</label>&nbsp;
-          <input
-            id="gridsize-input"
-            type="range"
-            min="1"
-            max="16"
-            defaultValue={gridSize}
-            onChange={handleGridSizeChange}
-          />
-          <button onClick={randomize}>Randomize</button>
-          <button onClick={clear}>Clear</button>
-        </div>
-      </header>
+      <Header
+        gridSize={gridSize}
+        onGridSizeChange={handleGridSizeChange}
+        onRandomize={randomize}
+        onClear={clear}
+      />
       <TilesLibrary selectedTile={selectedTile} onSelect={handleSelect} />
       <TilesView
         tiles={tiles}
