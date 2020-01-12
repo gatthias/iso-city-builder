@@ -18,6 +18,14 @@ export default function TilesBuilder() {
   const [tiles, setTiles] = useState(baseTiles);
   const [selectedTile, setSelectedTile] = useState(0);
 
+  /**
+   * Utils
+   */
+  const updateHash = () => debouce(() => saveToHash({ gridSize, tiles }), 500);
+
+  /**
+   * Header handlers
+   */
   const handleGridSizeChange = ev => {
     const newValue = Number(ev.target.value);
     const newTiles = updateGridSize(gridSize, newValue, tiles);
@@ -27,18 +35,27 @@ export default function TilesBuilder() {
     setTiles(newTiles);
     updateHash();
   };
+  const randomize = () => {
+    setTiles(createTiles(gridSize));
+    updateHash();
+  };
+  const clear = () => {
+    setTiles(createTiles(gridSize, false));
+    updateHash();
+  };
 
-  const randomize = () => setTiles(createTiles(gridSize)) || updateHash();
-  const clear = () => setTiles(createTiles(gridSize, false)) || updateHash();
-
+  /**
+   * Library handlers
+   */
   const handleSelect = newSelection => {
     if (newSelection !== selectedTile) {
       setSelectedTile(newSelection);
     }
   };
 
-  const updateHash = () => debouce(() => saveToHash({ gridSize, tiles }), 500);
-
+  /**
+   * View Handlers
+   */
   const setTile = (tileIdx, tileType) => {
     const newTiles = [...tiles];
     newTiles[tileIdx] = tileType;
@@ -46,7 +63,6 @@ export default function TilesBuilder() {
 
     updateHash();
   };
-
   const leftClick = tileIdx => setTile(tileIdx, selectedTile);
   const rightClick = tileIdx => setTile(tileIdx, 0);
 

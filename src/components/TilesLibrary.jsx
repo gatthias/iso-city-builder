@@ -1,6 +1,5 @@
 import "./TilesLibrary.css";
 import React from "react";
-
 import {
   availableTiles as tiles,
   tileToBgPosition
