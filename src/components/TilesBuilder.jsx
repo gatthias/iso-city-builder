@@ -1,12 +1,13 @@
+import "./TilesBuilder.css";
 import React, { useState } from "react";
-import TilesLibrary from "./TilesLibrary";
-import TilesView from "./TilesView";
+import TilesLibrary from "components/TilesLibrary";
+import TilesView from "components/TilesView";
 import {
   indexToPosition,
   positionToIndex,
   stateToB64,
   B64ToState
-} from "./TilesService";
+} from "providers/TilesService";
 
 const createTiles = (gridSize, randomize = true) =>
   new Array(gridSize * gridSize)

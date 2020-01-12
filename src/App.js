@@ -1,6 +1,6 @@
 import React from "react";
 import "./styles.css";
-import TilesBuilder from "./TilesBuilder";
+import TilesBuilder from "components/TilesBuilder";
 
 export default function App() {
   return (

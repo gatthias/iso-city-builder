@@ -1,0 +1,41 @@
+.tiles-library {
+  width: 20%;
+  min-width: 120px;
+  max-width: 300px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  height: calc(100% - 32px);
+  overflow: scroll;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: #444;
+}
+
+.tiles-library h1 {
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+  background: #222;
+  color: #eee;
+  font-size: 22px;
+  font-weight: 400;
+  height: 46px;
+}
+
+.tiles-library .tile {
+  width: 50%;
+  max-width: 90px;
+  transition: background 0.2s;
+}
+
+.tiles-library .tile .tile-img {
+  background-image: url(assets/tiles_130x66_130x230.png);
+  background-repeat: no-repeat;
+  background-size: 1200%;
+  padding-top: calc(230 / 130 * 100%);
+}
+
+.tiles-library .tile.selected {
+  background: #ffbc00;
+}

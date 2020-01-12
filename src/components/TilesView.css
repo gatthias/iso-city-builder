@@ -1,0 +1,33 @@
+.tiles-view {
+  height: calc(100% - 32px);
+  flex-grow: 1;
+  overflow: scroll;
+  position: relative;
+  background: #2a3444;
+}
+
+.tiles-view .tile {
+  background-image: url(assets/tiles_130x66_130x230.png);
+  background-repeat: no-repeat;
+  background-size: auto;
+  width: 130px;
+  height: 230px;
+  position: absolute;
+  pointer-events: none;
+}
+
+.tiles-view .tile .tile-btn {
+  background: rgba(0, 0, 0, 0.4);
+  width: 130px;
+  height: 130px;
+  display: block;
+  transform: translate(0px, 97px) scale(0.7, 0.35) rotate(45deg);
+  pointer-events: all;
+  will-change: opacity;
+  opacity: 0;
+  transition: opacity 0.1s;
+}
+
+.tiles-view .tile .tile-btn:hover {
+  opacity: 1;
+}

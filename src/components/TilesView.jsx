@@ -1,5 +1,6 @@
+import "./TilesView.css";
 import React from "react";
-import { indexToBgPosition, indexToViewPosition } from "./TilesService";
+import { indexToBgPosition, indexToViewPosition } from "providers/TilesService";
 
 const getTileIdxFromBtnEvent = ev =>
   ev.target.hasAttribute("data-tile-idx")
