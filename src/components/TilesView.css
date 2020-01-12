@@ -7,7 +7,7 @@
 }
 
 .tiles-view .tile {
-  background-image: url(assets/tiles_130x66_130x230.png);
+  background-image: url(/assets/tiles_130x66_130x230.png);
   background-repeat: no-repeat;
   background-size: auto;
   width: 130px;

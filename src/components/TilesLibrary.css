@@ -30,7 +30,7 @@
 }
 
 .tiles-library .tile .tile-img {
-  background-image: url(assets/tiles_130x66_130x230.png);
+  background-image: url(/assets/tiles_130x66_130x230.png);
   background-repeat: no-repeat;
   background-size: 1200%;
   padding-top: calc(230 / 130 * 100%);
