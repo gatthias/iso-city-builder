@@ -52,7 +52,11 @@ export default function TilesView({
               left
             }}
           >
-            <div className="tile-btn" data-tile-idx={i} onClick={handleClick} />
+            <div
+              className="tile-btn"
+              data-tile-idx={i}
+              onMouseDown={handleClick}
+            />
           </div>
         );
       })}

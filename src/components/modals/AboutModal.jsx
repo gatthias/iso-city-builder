@@ -22,11 +22,14 @@ export default function AboutModal({ setOpen }) {
       </p>
 
       <p>Created with React.</p>
-      <h2>Tip</h2>
-      <p>
-        Share your creations with the generated url, it is changing as you
-        build.
-      </p>
+      <h2>Tips</h2>
+      <ul>
+        <li>
+          Share your creations by sharing your page URL, it is changing as you
+          build
+        </li>
+        <li>You can undo/redo using your browser back/forward functions</li>
+      </ul>
     </Modal>
   );
 }

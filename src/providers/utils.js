@@ -18,7 +18,7 @@ export const debouce = (cb, delay) => {
 };
 
 export const saveToHash = obj => {
-  window.location.hash = stateToB64(obj);
+  return (window.location.hash = stateToB64(obj));
 };
 
 export const loadFromHash = maybeHash => {
